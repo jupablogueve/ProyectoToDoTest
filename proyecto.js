@@ -2,41 +2,69 @@ $(document).ready(inicioEventos);
 
 function inicioEventos() 
 	{
-		$('main>div>button').click(crearNuevoTab);
+		$('main>div>button').click(nombreLista);
+		$('div>span>button').click(crearNuevoTab);
 		$(document).on('click', 'a', activar);
 		$('main>button').click(agregarTarea);
-		$('main>input').focus(vaciarcasilla);
-		$('main>input').blur(llenarcasilla);
+		$('main>input').focus(vaciarCasilla).blur(llenarCasilla);;
+		$('div>span>input').focus(vaciarCasilla).blur(llenarCasilla);	
 	}
 
 var listaTabs = {};
 var contador=0;	
 var TabActivo='';
+var Tab='';
 
-function llenarcasilla()
+function llenarCasilla()
 	{
 		if(!$('main>input').val())
 			{
-			$('main>input').val('Escribe tu nueva tarea');
+				$('main>input').val('Escribe tu nueva tarea');
+			}
+		else if(!$('div>span>input').val())
+			{
+				$('div>span>input').val('Escribe nombre de lista');
 			}
 	}
 
-function vaciarcasilla() 
+function vaciarCasilla() 
 	{
-		$('main>input').val('');
+		$(this).val('');
 	}
 	
-function escribirNombreTab()
+function nombreLista()
 	{
+		$('div>span>input').toggle('slow');
+		$('div>span>button').toggle('slow');
+		if($('main>input').attr('class')=='visible')
+			{
+				$('main>input').toggle('slow');
+				$('main>button').toggle('slow');
+			}
+		var signo=$('main>div>button').html();
+		if(signo=='+')
+			{
+				$('main>div>button').html('-');
+				signo='';
+			}
+		else if(signo=='-')
+			{
+				$('main>div>button').html('+');	
+			}
+		llenarCasilla();
 		
 	}
 	
 function crearNuevoTab()
 	{
-		contador++;
-		listaTabs['Tab'+contador]=[];
+		Tab=$('div>span>input').val();
+		listaTabs[Tab]=[];
 		$('div > ul').html(dibujarTab());		
 		$('a').trigger('click');
+		cambioVisibilidad();
+		$('main>input').attr('class','visible');
+		$('main>button').attr('class','visible');
+		$('main>div>button').html('+');
 	}
 
 function dibujarTab()
@@ -47,6 +75,14 @@ function dibujarTab()
 				pasteTabs=pasteTabs+"<li>"+"<a href='"+"#"+propiedad+"'>"+propiedad+"</a>"+"</li>";
 			}
 		return pasteTabs;
+	}
+
+function cambioVisibilidad()
+	{
+		$('div>span>input').toggle('slow');
+		$('div>span>button').toggle('slow');
+		$('main>input').toggle('slow');
+		$('main>button').toggle('slow');
 	}
 
 function activar()
@@ -71,6 +107,7 @@ function pegarTarea()
 			{
 				$('main>ul').append(traerTemplate(listaTabs[TabActivo][f]));
 			}
+		$('.checkeado').attr('checked',true);
 	}		
 	
 function traerTemplate(tarea) 
@@ -82,29 +119,6 @@ function traerTemplate(tarea)
 					"<span>"+tarea+"</span>"+
 				"</li>";	
 	}
+	
 
 //-------------------------------------------------------------------------------------------------------------------------------		
-		
-		//$('ul').data('tarea')	
-		//var activado = $('.tabs > li.active');
-		//$(this).parent().toggle();
-		//data-tarea="tarea1"
-		//$().data(nombre,valor)
-		
-		//activado.removeClass('active');
-		/* $(TabActivo).removeClass('active');
-		$(TabActivo).addClass('hide'); */ 
-		
-		
-/* 		$(this).parents('li').addClass('active');
-		hide displaying tab content
-		$(selectorTabActivo).removeClass('active');
-		$(selectorTabActivo).addClass('hide');
- 
-		show target tab content
-		var target_tab_selector = $(this).attr('href');
-		$(target_tab_selector).removeClass('hide');
-		$(target_tab_selector).addClass('active');  */		
-		//$(TabActivo).attr('class','listaTareas active');
-		//$(TabActivo).siblings('ul').attr('class','listaTareas hide');
-		//$('#botonTab').click(crearNuevoTab);
